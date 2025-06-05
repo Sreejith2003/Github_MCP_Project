@@ -46,8 +46,7 @@
 ## Project Structure
 
 - `github_mcpserver.py` - Main FastAPI server with MCP endpoints and GitHub integration
-- `github_mcp.py` - (Copy or variant of the main server code)
-- `.env` - Environment variables (not committed)
+- `.env` - Environment variables
 - `.gitignore` - Standard Python and project ignores
 - `DockerFile` - Docker configuration for containerized deployment
 
@@ -60,6 +59,3 @@
 - python-dotenv
 - pydantic
 
-## License
-
-MIT
