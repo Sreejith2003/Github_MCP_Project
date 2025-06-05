@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+github
+pydantic
+dotenv
+PyGithub
+python-dotenv
