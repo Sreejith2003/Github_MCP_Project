@@ -1,61 +1,139 @@
-# Github MCP Project
+# GitHub MCP (Model Context Protocol) Server
 
-## Overview
-
-**Model Context Protocol (MCP)** is a FastAPI-based server that provides a standardized interface for connecting AI models, tools, and agents with external systems and APIs-especially GitHub. MCP enables seamless integration, orchestration, and automation of workflows involving large language models (LLMs), APIs, and custom tools.
+A FastAPI-based MCP server implementation for GitHub operations. This server provides a bridge between AI models and GitHub, allowing automated repository and file management through a standardized API.
 
 ## Features
 
-- **Standardized API** for tool and model integration
-- **Extensible**: Add custom tools and endpoints easily
-- **Supports Orchestration**: Automate multi-step workflows
-- **Real-time Communication**: SSE and streaming support
-- **OpenAPI Compatible**: Easy to connect with AI agents and clients
-- **GitHub Integration**: Create, update, and delete repositories and files
+- Create/delete GitHub repositories
+- Create/update/delete files in repositories
+- Get file contents from repositories
+- Push entire project directories
+- Built-in rate limiting handling
+- Support for large files (up to 100MB)
+- Natural language command parsing
+- Server-Sent Events (SSE) support
 
-## Endpoints
+## Available Tools
 
-- `GET /mcp/tools` - List available tools
-- `POST /mcp/invoke` - Invoke a tool (e.g., create repo, add file)
-- `POST /mcp/parse_prompt` - Parse natural language to tool calls
-- `GET /mcp/sse` - Server-sent events for real-time updates
+1. **create_repository**
+   - Create new GitHub repositories
+   - Optional: Set private/public status
+   - Optional: Initialize with README
 
-## Example Usage
+2. **create_file**
+   - Create new files in repositories
+   - Support for all file types
+   - Custom commit messages
 
-- Register tools and APIs for LLMs to use
-- Automate repository management, file creation, and more
-- Integrate with Copilot, chatbots, or custom agents
+3. **update_file**
+   - Update existing files
+   - Preserves file history
+   - Custom commit messages
 
-## Quick Start
+4. **delete_file**
+   - Remove files from repositories
+   - Custom commit messages
+
+5. **delete_repository**
+   - Delete entire repositories
+   - Safety checks included
+
+6. **get_file**
+   - Retrieve file contents
+   - Support for all text files
+   - Includes file metadata
+
+7. **push_project**
+   - Push entire project directories
+   - Intelligent file filtering
+   - Handles large projects
+   - Automatic retries for rate limits
+
+## Setup
 
 1. Clone the repository
 2. Install dependencies:
-   ```
+   `ash
    pip install -r requirements.txt
-   ```
-3. Set up your `.env` file with your GitHub Personal Access Token:
-   ```
-   Github_PAT_API = "YOUR_GITHUB_PAT_API"
-   ```
-4. Run the FastAPI server:
-   ```
-   uvicorn github_mcpserver:app --host 0.0.0.0 --port 3000
-   ```
-5. Access the API docs at [http://localhost:3000/docs](http://localhost:3000/docs)
+   `
 
-## Project Structure
+3. Create a .env file with your GitHub PAT:
+   `env
+   Github_PAT_API=your_github_pat_here
+   `
 
-- `github_mcpserver.py` - Main FastAPI server with MCP endpoints and GitHub integration
-- `.env` - Environment variables
-- `.gitignore` - Standard Python and project ignores
-- `DockerFile` - Docker configuration for containerized deployment
+4. Run the server:
+   `ash
+   python github_mcpserver.py
+   `
 
-## Requirements
+## Usage Examples
 
-- Python 3.8+
-- FastAPI
-- Uvicorn
-- PyGithub
-- python-dotenv
-- pydantic
+### Create a Repository
+`json
+{
+    "tool": "create_repository",
+    "inputs": {
+        "repo_name": "my-new-repo",
+        "private": true,
+        "initialize_readme": true
+    }
+}
+`
 
+### Create a File
+`json
+{
+    "tool": "create_file",
+    "inputs": {
+        "repo_name": "owner/repo",
+        "file_path": "src/main.py",
+        "content": "print('Hello, World!')",
+        "commit_message": "Add main script"
+    }
+}
+`
+
+### Push a Project
+`json
+{
+    "tool": "push_project",
+    "inputs": {
+        "repo_name": "owner/repo",
+        "project_path": "/path/to/project",
+        "commit_message": "Initial project upload"
+    }
+}
+`
+
+## Natural Language Support
+
+The server includes natural language parsing for commands. Examples:
+
+- "Create a repository named test-repo"
+- "Create a file main.py in test-repo with content: print('Hello')"
+- "Update the file README.md in test-repo with content from local-readme.md"
+- "Delete the file config.json in test-repo"
+
+## Error Handling
+
+- Automatic retries for rate limits
+- Detailed error messages
+- Size limit checks
+- File existence validation
+- Encoding handling for binary files
+
+## Security Features
+
+- GitHub PAT required
+- File size limits
+- Excluded sensitive directories
+- Error message sanitization
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
+
+## License
+
+MIT License
