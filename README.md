@@ -130,10 +130,3 @@ The server includes natural language parsing for commands. Examples:
 - Excluded sensitive directories
 - Error message sanitization
 
-## Contributing
-
-Feel free to submit issues and enhancement requests!
-
-## License
-
-MIT License
